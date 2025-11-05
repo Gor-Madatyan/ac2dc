@@ -11,6 +11,7 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":lexer"))
     testImplementation(kotlin("test"))
 }
 
