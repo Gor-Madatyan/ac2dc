@@ -42,9 +42,9 @@ internal val achandler =
             null,
             ACTokenMetadata.EOF
         ) next LexHandler { context, _ ->
-            System.err.println("Can't handle ${context.reader.read().toChar()} at line ${context.line}")
-            context.mark()
+            System.err.println("Can't handle ${context.curr} at line ${context.line}")
             context.hasError = true
+            context.next()
             return@LexHandler first(context)
         }
     }

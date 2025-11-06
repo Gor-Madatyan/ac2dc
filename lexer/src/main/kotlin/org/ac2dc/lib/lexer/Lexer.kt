@@ -6,16 +6,29 @@ import org.ac2dc.lib.representation.TokenMetadata
 import java.io.Reader
 
 internal data class LexingContext(
-    val reader: Reader,
+    private val reader: Reader,
     val lookAhead: Int = DEFAULT_LOOK_AHEAD,
     var hasError: Boolean = false,
     var line: Int = 1
 ) {
-    fun mark() {
-        reader.mark(lookAhead)
+    private val buff = CharArray(lookAhead + 1) { reader.read().toChar() }
+    val curr
+        get() = buff[0]
+
+    fun next() {
+        for (i in 0..<lookAhead) {
+            buff[i] = buff[i + 1]
+        }
+        buff[lookAhead] = reader.read().toChar()
     }
-    fun reset(){
-        reader.reset()
+
+    fun lookAhead(ahead: Int): Char {
+        if (ahead !in 1..lookAhead) throw IllegalArgumentException("Invalid lookAhead")
+        return buff[ahead]
+    }
+
+    inline fun use(lambda: (LexingContext) -> Unit) {
+        reader.use { lambda(this) }
     }
 }
 

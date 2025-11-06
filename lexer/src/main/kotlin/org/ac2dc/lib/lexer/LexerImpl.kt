@@ -14,10 +14,9 @@ internal class LexerImpl<T : TokenMetadata>(
 
     private fun tokenStream(): Sequence<Token<T>> {
         return sequence {
-            context.reader.use {
+            context.use {
                 var token: Token<T>
                 do {
-                    context.mark()
                     token = handler(context).also { yield(it) }
                 } while (!token.metadata.isEOF)
             }
