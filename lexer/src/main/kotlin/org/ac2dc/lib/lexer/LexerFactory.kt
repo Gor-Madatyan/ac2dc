@@ -1,17 +1,15 @@
 package org.ac2dc.lib.lexer
 
-import org.ac2dc.lib.representation.Token
+import org.ac2dc.lib.lexer.util.DEFAULT_LOOK_AHEAD
 import org.ac2dc.lib.representation.TokenMetadata
 import java.io.Reader
 
 object LexerFactory {
-    fun createAClexer(source: Reader): Lexer<ACTokenMetadata> = LexerImpl(source, achandler)
+    fun createAClexer(source: Reader): Lexer<ACTokenMetadata> = LexerImpl(source, DEFAULT_LOOK_AHEAD, achandler)
 }
 
 enum class ACTokenMetadata : TokenMetadata {
-    KEYWORD,
-    IDENTIFIER,
-    LITERAL,
+    SYNTAX_ELEMENT,
     NEW_LINE,
     EOF;
 
@@ -19,8 +17,4 @@ enum class ACTokenMetadata : TokenMetadata {
         get() = this == EOF
 }
 
-private val achandler =
-    LexHandler { reader, parent ->
-        Token(null, ACTokenMetadata.EOF)
-    }
 
